@@ -1,10 +1,8 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import os
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from mlxtend.plotting import scatterplotmatrix
+from plotting.histograms import *
 
 
 class DataManager(object):
@@ -32,13 +30,6 @@ class DataManager(object):
         if self.processed_data is None:
             self.load_processed_data()
         return self.prepare_train_test_data()
-
-    def plot_native_data_scatter_matrix(self):
-        cols = self.native_data.columns
-        scatterplotmatrix(self.native_data[cols].values,
-                          figsize=(16, 9),
-                          names=cols,
-                          alpha=0.5)
 
     def process_native_data(self):
         self.processed_data = self.native_data.copy()
@@ -88,13 +79,11 @@ class DataManager(object):
         values = self.processed_data["education_level"]
         self.processed_data["education_level"] = values.map(education_mapping)
 
-
     def save_processed_data(self):
         try:
             self.processed_data.to_csv(self.PROCESSED_DATA_FILE_PATH, index=False)
         except IOError:
             print('Saving file with processed data failed')
-
 
     def prepare_train_test_data(self):
         cols = list(filter(lambda x: x != "target", self.processed_data.columns))
@@ -109,62 +98,6 @@ class DataManager(object):
 
         return X_train_std, y_train, X_test_std, y_test
 
-
-    @staticmethod
-    def draw_counts_histogram(data: np.ndarray,
-                              title: str = None,
-                              xlabel: str = None,
-                              ylabel: str = None):
-        sums = []
-        unique_ticks = np.unique(data)
-        for tic in unique_ticks:
-            sums.append((data == tic).sum())
-
-        length = len(sums)
-        colors = list(zip(np.random.rand(length), np.random.rand(length), np.random.rand(length), [1 for _ in sums]))
-        plt.bar(np.arange(length), sums, color=colors)
-        plt.xticks(np.arange(length), unique_ticks)
-        plt.title(title)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        plt.tight_layout()
-
-
-    @staticmethod
-    def draw_correlation_histogram(x: np.ndarray,
-                                   y: np.ndarray,
-                                   title: str = None,
-                                   xlabel: str = None,
-                                   ylabel: str = None):
-        targets = np.unique(y)
-        ticks = np.unique(x)
-
-        bars_values = []
-        targets_counts = [0 for _ in ticks]
-
-        for target in targets:
-            sums = []
-            for i, tick in enumerate(ticks):
-                indices = np.logical_and(x == tick, y == target)
-                indices_sum = sum(indices)
-                sums.append(indices_sum)
-                targets_counts[i] += indices_sum
-            bars_values.append(sums.copy())
-
-        bottom_values = [0 for _ in range(len(ticks))]
-        for i in range(len(targets)):
-            for j, count in enumerate(targets_counts):
-                bars_values[i][j] = bars_values[i][j] / count
-            plt.bar(np.arange(len(ticks)), bars_values[i], bottom=bottom_values)
-            bottom_values = bars_values[i]
-
-        plt.xticks(np.arange(len(ticks)), ticks)
-        plt.title(title)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        plt.tight_layout()
-
-
     def analyse_native_data(self):
         cols_labels = np.array(self.native_data.columns)
         cols_labels = cols_labels[cols_labels != "enrollee_id"]
@@ -178,7 +111,7 @@ class DataManager(object):
                 plt.subplot(fig_rows-1, fig_cols, i + 1)
                 x = self._fill_nans(self.native_data[label]).values
                 y = self.native_data["target"].values
-                self.draw_correlation_histogram(x, y, title=label)
+                draw_correlation_histogram(x, y, title=label)
         plt.suptitle("Correlations histograms")
         plt.tight_layout()
         plt.show()
@@ -187,11 +120,10 @@ class DataManager(object):
         for i, label in enumerate(cols_labels):
             plt.subplot(fig_rows, fig_cols, i+1)
             histogram_data = self._fill_nans(self.native_data[label]).values
-            self.draw_counts_histogram(histogram_data, title=label)
+            draw_counts_histogram(histogram_data, title=label)
         plt.suptitle("Counts histograms")
         plt.tight_layout()
         plt.show()
-
 
     def _fill_nans(self, df: pd.DataFrame):
         if df.values.dtype == np.float:
