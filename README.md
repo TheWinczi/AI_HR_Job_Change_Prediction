@@ -15,15 +15,15 @@
 ---
 
 ## Data details and dependencies
-> As seen in the diagrams below input data counts belong to each category is varies greatly and is not evenly distributed
+> As seen in the dcharts below, input data counts belong to each category is varies greatly and is not evenly distributed
 > ![data_counts_details](img/data_counts_details.png)
 
-> As seen in the charts below, the input data does not show any clear dependencies between a specific category and target. However, there is some relationship between the city and the target 
+> As seen in the charts below, input data does not show any clear dependencies between a specific category and target. However, there could be a relationship between the city development index and the target 
 > ![data_dependencies](img/data_dependencies.png)
 
 
 ---
-#TODO...
+# TODO...
 
 ---
 
