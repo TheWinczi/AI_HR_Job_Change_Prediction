@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from sklearn.decomposition import PCA
 
 
 def draw_counts_histogram(data: np.ndarray,
@@ -63,7 +65,11 @@ def draw_correlation_histogram(x: np.ndarray,
     plt.tight_layout()
 
 
-def plot_PCA_features_importances(x: np.ndarray):
+def plot_LDA_features_importances(x: np.ndarray,
+                                  y: np.ndarray,
+                                  title: str = None,
+                                  xlabel: str = None,
+                                  ylabel: str = None):
     """
     Plot features importances of input array using PCA
     dimensions reduction algorithm.
@@ -73,4 +79,33 @@ def plot_PCA_features_importances(x: np.ndarray):
     x : ndarray
         Array of lists/tuples of input features in shape
         [(f_00, f_01, f_02, ...), (f_10, f_11, f_12, ...) ...]
+
+    y : ndarray
+        Array of labels belong to each lists/tuples in input x array.
+
+    title : str {default: None}
+        Plot title. Could be None.
+
+    xlabel : str {default: None}
+        Label of x axis of plot. Could be None.
+
+    ylabel : str {default: None}
+        Label of y axis of plot. Could be None.
     """
+    lda = LDA(n_components=2)
+    lda.fit(x, y)
+
+    # pca = PCA(n_components=None)
+    # pca.fit(x)
+
+    features_importances = lda.explained_variance_ratio_
+
+    plt.figure(figsize=(16, 9))
+    plt.bar(np.arange(len(features_importances)), features_importances)
+
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+
+    plt.tight_layout()
+    plt.show()

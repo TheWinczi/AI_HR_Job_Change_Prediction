@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
 from plotting.histograms import *
 
@@ -99,6 +99,10 @@ class DataManager(object):
         return X_train_std, y_train, X_test_std, y_test
 
     def analyse_native_data(self):
+        encoded_df = self.cast_all_columns_values_into_uniques()
+        no_target_labels = list(filter(lambda item: item != "target", self.native_data.columns))
+        plot_LDA_features_importances(encoded_df[no_target_labels].values, encoded_df["target"].values)
+
         cols_labels = np.array(self.native_data.columns)
         cols_labels = cols_labels[cols_labels != "enrollee_id"]
 
@@ -108,7 +112,7 @@ class DataManager(object):
         plt.figure(figsize=(16, 9))
         for i, label in enumerate(cols_labels):
             if label not in ["target"]:
-                plt.subplot(fig_rows-1, fig_cols, i + 1)
+                plt.subplot(fig_rows - 1, fig_cols, i + 1)
                 x = self._fill_nans(self.native_data[label]).values
                 y = self.native_data["target"].values
                 draw_correlation_histogram(x, y, title=label)
@@ -118,7 +122,7 @@ class DataManager(object):
 
         plt.figure(figsize=(16, 9))
         for i, label in enumerate(cols_labels):
-            plt.subplot(fig_rows, fig_cols, i+1)
+            plt.subplot(fig_rows, fig_cols, i + 1)
             histogram_data = self._fill_nans(self.native_data[label]).values
             draw_counts_histogram(histogram_data, title=label)
         plt.suptitle("Counts histograms")
@@ -132,4 +136,14 @@ class DataManager(object):
             df = df.fillna(0)
         else:
             df = df.fillna("None")
+        return df
+
+    def cast_all_columns_values_into_uniques(self):
+        df = self.native_data.copy()
+        le = LabelEncoder()
+
+        for column in df.columns:
+            if df[column].dtype not in [np.int32, np.int64, np.float]:
+                df[column] = le.fit_transform(df[column])
+
         return df
