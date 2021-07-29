@@ -44,18 +44,33 @@ def draw_correlation_histogram(x: np.ndarray,
         bars_values.append(sums.copy())
 
     bottom_values = [0 for _ in range(len(ticks))]
-    for i in range(len(targets)):
+    sorted_indices = range(len(targets_counts))
+    for i in range(targets.shape[0]):
         for j, count in enumerate(targets_counts):
             bars_values[i][j] = bars_values[i][j] / count
 
-        # bars_sorted = np.sort(list(zip(np.arange(len(ticks)), bars_values[i])), axis=1)
-        # indexes, bars = zip(*bars_sorted)
+        if i == 0:
+            sorted_indices = np.argsort(bars_values[i])
 
-        plt.bar(np.arange(len(ticks)), bars_values[i], bottom=bottom_values)
-        bottom_values = bars_values[i]
+        plotting_bars_values = np.array(bars_values[i])[sorted_indices]
+        plt.bar(np.arange(len(ticks)), plotting_bars_values, bottom=bottom_values)
+        bottom_values = plotting_bars_values
 
     plt.xticks(np.arange(len(ticks)), ticks)
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.tight_layout()
+
+
+def plot_PCA_features_importances(x: np.ndarray):
+    """
+    Plot features importances of input array using PCA
+    dimensions reduction algorithm.
+
+    Parameters
+    ----------
+    x : ndarray
+        Array of lists/tuples of input features in shape
+        [(f_00, f_01, f_02, ...), (f_10, f_11, f_12, ...) ...]
+    """
