@@ -101,7 +101,14 @@ class DataManager(object):
     def analyse_native_data(self):
         encoded_df = self.cast_all_columns_values_into_uniques()
         no_target_labels = list(filter(lambda item: item != "target", self.native_data.columns))
-        plot_LDA_features_importances(encoded_df[no_target_labels].values, encoded_df["target"].values)
+        no_target_values = encoded_df[no_target_labels].values
+        no_target_values = StandardScaler().fit_transform(no_target_values)
+        plot_LDA_features_importances(no_target_values,
+                                      encoded_df["target"].values,
+                                      titles=["PCA", "KernelPCA", "LDA"],
+                                      xlabels=["Index of main component" for _ in range(3)],
+                                      ylabels=["explained variance coef" for _ in range(3)],
+                                      suptitle="Dimensionality reductions, features importances")
 
         cols_labels = np.array(self.native_data.columns)
         cols_labels = cols_labels[cols_labels != "enrollee_id"]
