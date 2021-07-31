@@ -9,7 +9,7 @@
 - As part of learning some different classification algorithms was used and compared (including deep neural network)
 
 ### Train and test data
-- Data used to train and test describe values describe people - their gender, city, city development, education level and other
+- Data used to train and test describe values describe people - their gender, city, city development, education level etc.
 - train data input shape (14368, 14)
 - test data shape (4790, 14)
 ---
@@ -30,9 +30,32 @@ To reduce data dimensionality from 14 to *n* (when n << 14) 3 algorithms was use
 * Kernel PCA
 * LDA
 
+> Chart of **PCA** results shows that there are no one/two features that account for most of the information contained in the input data.
+> ![PCA_results](img/PCA_histogram.png)
+
+> **KernelPCA** algorithm in scikit-learn doesn't contain attributes thanks to which would be possible to plot features importances.
+
+> **LDA** dimensionality reduction could reduce input data into *min(unique_targets-1, features-1)*-dimensional space. In this case, this algorithm will not be of use.
+
 ---
+
+### Classification
+Classification was performed using several different algorithms. 
+All the algorithms used were compared in several ways.
+
+Algorithms used:
+1. Decision Tree,
+2. Random forest,
+3. K-Nearest Neighbors (KNN),
+4. C-Support Vector Classification (SVC),
+5. Logistic Regression,
+6. Team Classification,
+7. Deep Neural Network.
+
+---
+
 ## TODO ...
-1. Data dimensionality reduction description and results,
+1. Code refactoring - deleting DataManager class, creating classification package,
 2. Using and comparing different classification algorithms,
 3. Using team classification,   
 4. Showing differences between ready estimators from sklearn package and
