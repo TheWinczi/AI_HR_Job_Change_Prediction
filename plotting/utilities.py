@@ -70,3 +70,26 @@ def _get_colors(count: int = 1, kind: str = "float", random: bool = False):
         np.random.shuffle(colors)
 
     return colors
+
+
+def calculate_figure_dims(sub_charts: int):
+    """
+    Calculate how many rows and columns has to be the best looking figure.
+
+    Parameters
+    ----------
+    sub_charts : int
+        Number >= 0 defines how many sub charts are on figure.
+
+    Returns
+    -------
+    (rows, cols)
+        Tuple of rows and columns numbers of best looking figure.
+    """
+    if sub_charts < 0:
+        sub_charts = 0
+
+    fig_cols = np.floor(np.sqrt(sub_charts)).astype(np.int32)
+    fig_rows = np.ceil(sub_charts / fig_cols).astype(np.int32)
+
+    return fig_rows, fig_cols

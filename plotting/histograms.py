@@ -1,35 +1,207 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
-from sklearn.decomposition import PCA, KernelPCA
+from sklearn.decomposition import PCA
+from plotting import *
 
 
-def draw_counts_histogram(data: np.ndarray,
-                          title: str = None,
-                          xlabel: str = None,
-                          ylabel: str = None):
-    sums = []
-    unique_ticks = np.unique(data)
+def plot_data_columns_counts(x: np.ndarray,
+                             titles: list[str] = None,
+                             xlabels: list[str] = None,
+                             ylabels: list[str] = None,
+                             suptitle: str = None,
+                             sort: bool = False):
+    """
+    Plot data columns values counts.
+
+    Parameters
+    ----------
+    x : ndarray
+        Array of lists/tuples of data features in shape
+        [(f_00, f_01, f_02, ...), (f_10, f_11, f_12, ...) ...]
+
+    titles : list[str] {default: None}
+        List of each chart title. Could be None.
+
+    xlabels : list[str] {default: None}
+        List of each label of x axis of chart. Could be None.
+
+    ylabels : list[str] {default: None}
+        List of each label of y axis of chart. Could be None.
+
+    suptitle : str {default: None}
+        Suptitle, main title of whole plot.
+
+    sort : bool {default: False}
+        Are columns counts have to be sorted in ascending order.
+    """
+    cols_values = []
+    for i in range(len(x[0])):
+        cols_values.append(x[:, i])
+
+    fig_rows, fig_cols = calculate_figure_dims(len(cols_values))
+
+    plt.figure(figsize=(16, 9))
+    for i, values in enumerate(cols_values):
+        plt.subplot(fig_rows, fig_cols, i+1)
+
+        title = None if titles is None else titles[i]
+        xlabel = None if xlabels is None else xlabels[i]
+        ylabel = None if ylabels is None else ylabels[i]
+
+        draw_data_column_counts(values,
+                                title=title,
+                                xlabel=xlabel,
+                                ylabel=ylabel,
+                                sort=sort)
+    plt.suptitle(suptitle)
+    plt.tight_layout()
+    plt.show()
+
+
+def draw_data_column_counts(x: np.ndarray,
+                            title: str = None,
+                            xlabel: str = None,
+                            ylabel: str = None,
+                            sort: bool = False):
+    """
+    Draw data columns values counts on created plot.
+
+    Parameters
+    ----------
+    x : ndarray
+        Array of values of each feature importance in shape
+        [f_0, f_1, f_2, ... ] which sum is equal 1.
+
+    y : ndarray
+        List of target values which belongs to each
+        tuple/list of input x array.
+
+    title : str {default: None}
+        Chart title. Could be None.
+
+    xlabel : str {default: None}
+        Label of x axis of chart. Could be None.
+
+    ylabel : str {default: None}
+        Label of y axis of chart. Could be None.
+
+    sort: bool {default: False}
+        Are columns counts have to be sorted in ascending order.
+    """
+    bars_values = []
+    unique_ticks = np.unique(x)
     for tic in unique_ticks:
-        sums.append((data == tic).sum())
+        bars_values.append((x == tic).sum())
 
-    length = len(sums)
-    colors = list(zip(np.random.rand(length), np.random.rand(length), np.random.rand(length), [1 for _ in sums]))
-    plt.bar(np.arange(length), sums, color=colors)
+    length = len(bars_values)
+    colors = list(zip(np.random.rand(length),       # R
+                      np.random.rand(length),       # G
+                      np.random.rand(length),       # B
+                      [1 for _ in range(length)]))  # A
+
+    if sort:
+        indices = np.argsort(bars_values)
+    else:
+        indices = np.arange(length)
+
+    plotting_bars_values = np.array(bars_values)[indices]
+
+    plt.bar(np.arange(length), plotting_bars_values, color=colors)
     plt.xticks(np.arange(length), unique_ticks)
 
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-
     plt.tight_layout()
 
 
-def draw_correlation_histogram(x: np.ndarray,
-                               y: np.ndarray,
-                               title: str = None,
-                               xlabel: str = None,
-                               ylabel: str = None):
+def plot_data_target_dependencies(x: np.ndarray,
+                                  y: np.ndarray,
+                                  titles: list[str] = None,
+                                  xlabels: list[str] = None,
+                                  ylabels: list[str] = None,
+                                  suptitle: str = None,
+                                  sort: bool = False):
+    """
+    Analyze data dependencies on target. Show is any dependencies
+    between specific columns values and target.
+
+    Parameters
+    ----------
+    x : ndarray
+        Array of lists/tuples of data features in shape
+        [(f_00, f_01, f_02, ...), (f_10, f_11, f_12, ...) ...]
+
+    titles : list[str] {default: None}
+        List of each chart title. Could be None.
+
+    xlabels : list[str] {default: None}
+        List of each label of x axis of chart. Could be None.
+
+    ylabels : list[str] {default: None}
+        List of each label of y axis of chart. Could be None.
+
+    suptitle : str {default: None}
+        Suptitle, main title of whole plot.
+
+    sort : bool {default: False}
+        Are dependencies have to be sorted.
+    """
+    cols_values = []
+    for i in range(len(x[0])):
+        cols_values.append(x[:, i])
+
+    fig_rows, fig_cols = calculate_figure_dims(len(cols_values))
+
+    plt.figure(figsize=(16, 9))
+    for i, values in enumerate(cols_values):
+        plt.subplot(fig_rows, fig_cols, i + 1)
+
+        title = None if titles is None else titles[i]
+        xlabel = None if xlabels is None else xlabels[i]
+        ylabel = None if ylabels is None else ylabels[i]
+
+        draw_data_target_dependencies(values, y,
+                                      title=title,
+                                      xlabel=xlabel,
+                                      ylabel=ylabel,
+                                      sort=sort)
+    plt.suptitle(suptitle)
+    plt.tight_layout()
+    plt.show()
+
+
+def draw_data_target_dependencies(x: np.ndarray,
+                                  y: np.ndarray,
+                                  title: str = None,
+                                  xlabel: str = None,
+                                  ylabel: str = None,
+                                  sort: bool = False):
+    """
+    Draw data dependency on target on created plot.
+
+    Parameters
+    ----------
+    x : ndarray
+        Array of values of each feature importance in shape
+        [f_0, f_1, f_2, ... ] which sum is equal 1.
+
+    y : ndarray
+        List of target values which belongs to each
+        tuple/list of input x array.
+
+    title : str {default: None}
+        Chart title. Could be None.
+
+    xlabel : str {default: None}
+        Label of x axis of chart. Could be None.
+
+    ylabel : str {default: None}
+        Label of y axis of chart. Could be None.
+
+    sort: bool {default: False}
+        Are dependencies have to be sorted.
+    """
     targets = np.unique(y)
     ticks = np.unique(x)
 
@@ -51,7 +223,7 @@ def draw_correlation_histogram(x: np.ndarray,
         for j, count in enumerate(targets_counts):
             bars_values[i][j] = bars_values[i][j] / count
 
-        if i == 0:
+        if sort and i == 0:
             sorted_indices = np.argsort(bars_values[i])
 
         plotting_bars_values = np.array(bars_values[i])[sorted_indices]
