@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
@@ -136,7 +135,7 @@ def process_enrolled_university(df: pd.DataFrame):
     df
         Processed "enrolled_university" column as DataFrame.
     """
-    university_mapping = {np.nan: 0,
+    university_mapping = {"None": 0,
                           "no_enrollment": 1,
                           "Part time course": 2,
                           "Full time course": 3}
@@ -159,7 +158,7 @@ def process_education_level(df: pd.DataFrame):
     df
         Processed "education_level" column as DataFrame.
     """
-    education_mapping = {np.nan: 0,
+    education_mapping = {"None": 0,
                          "Primary School": 1,
                          "High School": 2,
                          "Masters": 3,
