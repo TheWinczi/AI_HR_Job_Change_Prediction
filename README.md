@@ -55,12 +55,11 @@ Algorithms used:
 ---
 
 ## TODO ...
-1. Code refactoring - deleting DataManager class, creating classification package,
-2. Using and comparing different classification algorithms,
-3. Using team classification,   
-4. Showing differences between ready estimators from sklearn package and
+1. Using and comparing different classification algorithms,
+2. Using team classification,   
+3. Showing differences between ready estimators from sklearn package and
    tensorflow.keras deep neural network,
-5. Summary
+4. Summary
    * what has gone well/wrong,
    * what to change in the future programs, 
    * general thoughts
