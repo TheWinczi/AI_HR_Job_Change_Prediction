@@ -20,15 +20,20 @@ def fill_nans_in_column(df: pd.DataFrame):
     return df
 
 
-def cast_all_columns_values_into_unique_labels(df: pd.DataFrame):
+def cast_all_columns_values_into_unique_values(df: pd.DataFrame):
     for column in df.columns:
-        df[column] = cast_column_values_into_unique_labels(df[column])
+        df[column] = cast_column_values_into_unique_values(df[column])
     return df
 
 
-def cast_column_values_into_unique_labels(df: pd.DataFrame):
+def cast_column_values_into_unique_values(df: pd.DataFrame):
     le = LabelEncoder()
 
     if df.dtype not in [np.int32, np.int64, np.float]:
         df = le.fit_transform(df)
+    return df
+
+
+def drop_columns(df: pd.DataFrame, columns: list[str]):
+    df = df.drop(columns, axis=1)
     return df
