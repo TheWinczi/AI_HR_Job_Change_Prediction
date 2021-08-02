@@ -1,17 +1,17 @@
 import numpy as np
-from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 
 
-def logistic_regression(X_train: np.ndarray, y_train: np.ndarray,
-                        X_test: np.ndarray = None, y_test: np.ndarray = None):
+def support_vectors(X_train: np.ndarray, y_train: np.ndarray,
+                    X_test: np.ndarray = None, y_test: np.ndarray = None):
     """
-    Logistic Regression classification algorithm used for classification input data.
+    C-Support Vector Classification classification algorithm used for classification input data.
 
     References
     ----------
-    [1] https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
+    [1] https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
 
     Parameters
     ----------
@@ -31,25 +31,24 @@ def logistic_regression(X_train: np.ndarray, y_train: np.ndarray,
 
     Returns
     -------
-    logistic
+    svm
         Trained classifier ready to predict.
     """
-    # _check_logistic_regression_params(X_train, y_train)
+    # _check_svm_params(X_train, y_train)
 
-    logistic = LogisticRegression(C=0.5,
-                                  solver='lbfgs',
-                                  tol=10**(-3),
-                                  random_state=1)
-    logistic.fit(X_train, y_train)
+    svm = SVC(C=0.5,
+              kernel='rbf',
+              random_state=1)
+    svm.fit(X_train, y_train)
 
     if X_test is not None and y_test is not None and len(X_test) == len(y_test):
-        y_pred = logistic.predict(X_test)
-        print(f"Logistic Regression test accuracy: {accuracy_score(y_test, y_pred)}")
+        y_pred = svm.predict(X_test)
+        print(f"SVM test accuracy: {accuracy_score(y_test, y_pred)}")
 
-    return logistic
+    return svm
 
 
-def _check_logistic_regression_params(X: np.ndarray, y: np.ndarray):
+def _check_svm_params(X: np.ndarray, y: np.ndarray):
     """
     Check all parameters needed in SVM classification algorithm.
     Show results on plots.
@@ -63,14 +62,14 @@ def _check_logistic_regression_params(X: np.ndarray, y: np.ndarray):
     y : ndarray
         Array of labels belongs to input X data.
     """
-    Cs = [0.001, 0.01, 0.1, 1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-    solvers = ["newton-cg", "lbfgs", "liblinear", "sag", "saga"]
+    Cs = [0.001, 0.01, 0.1, 1, 10, 20, 30]
+    kernels = ["linear", "poly", "rbf", "sigmoid"]
     param_grid = {
         "C": Cs,
-        "solver": solvers,
+        "kernel": kernels
     }
 
-    gs = GridSearchCV(estimator=LogisticRegression(random_state=1, multi_class='ovr', tol=10**(-3)),
+    gs = GridSearchCV(estimator=SVC(random_state=1),
                       param_grid=param_grid,
                       scoring='accuracy',
                       cv=10)
