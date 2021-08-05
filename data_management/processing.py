@@ -38,17 +38,20 @@ def process_all_labels(df: pd.DataFrame):
     proc_data
         Processed DataFrame with data ready to machine learning.
     """
-    dummies_cols = ["gender", "major_discipline", "training_hours",
-                    "last_new_job", "company_type", "company_size", "experience"]
-    encoded_cols = ["city"]
-    insignificant_cols = ["enrollee_id", "city"]
-
+    dummies_cols = ["gender", "relevent_experience", "enrolled_university", "education_level",
+                    "major_discipline", "company_size"]
     df = process_dummies_columns(df, dummies_cols)
+
+    encoded_cols = ["city", "city_development_index", "experience", "company_type",
+                    "last_new_job", "training_hours"]
+    df = encode_labels(df, encoded_cols)
+
+    insignificant_cols = ["enrollee_id"]
     df = drop_columns(df, insignificant_cols)
 
-    df["relevent_experience"] = process_relevent_exp(df)
-    df["enrolled_university"] = process_enrolled_university(df)
-    df["education_level"] = process_education_level(df)
+    # df["relevent_experience"] = process_relevent_exp(df)
+    # df["enrolled_university"] = process_enrolled_university(df)
+    # df["education_level"] = process_education_level(df)
 
     return df
 

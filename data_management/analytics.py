@@ -17,6 +17,7 @@ def analyse_native_data(df: pd.DataFrame):
     """
     analyse_data_columns_count(df, sort=False)
     analyse_data_target_dependencies(df, sort=True)
+    analyse_data_target_dependencies(df, sort=False)
     analyse_data_PCA_reduction(df)
 
 

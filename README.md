@@ -18,7 +18,9 @@
 > As seen in the charts below, input data counts belong to each category is varies greatly and is not evenly distributed
 > ![data_counts_details](img/data_counts_details.png)
 
-> As seen in the charts below, input data does not show any clear dependencies between a specific category and target. However, there could be a relationship between the city development index and the target 
+> As seen in the charts below, there are some potentially dependencies between a specific category and target. 
+> This is clearly visible in the charts with titles "city", "city development index", "training hours", "experience".
+> There are not visible dependencies between target and gender, major discipline, company size.
 > ![data_dependencies_unsorted](img/data_dependencies_unsorted.png)
 > ![data_dependencies_sorted](img/data_dependencies_sorted.png)
 
