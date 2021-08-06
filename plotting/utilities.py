@@ -41,7 +41,7 @@ def _get_colors(count: int = 1, kind: str = "float", random: bool = False):
     Parameters
     ----------
     count : int {default: 1}
-        number of needed marker. Has to be >=1.
+        Number of needed marker. Has to be >=1.
 
     kind : str {default: "float"}
         Data type (in string) whose colors will be returned.
@@ -70,6 +70,35 @@ def _get_colors(count: int = 1, kind: str = "float", random: bool = False):
         np.random.shuffle(colors)
 
     return colors
+
+
+def _get_lines_styles(count: int = 1):
+    """
+    Get list of line styles which can be used during
+    plotting charts or diagrams in matplotlib package.
+
+    Parameters
+    ----------
+    count : int {default: 1}
+        Number of needed styles. Has to be >=1.
+
+    Returns
+    -------
+    colors
+        List of line styles ready to use in matplotlib package.
+    """
+    styles = {'-': '_draw_solid',
+              '--': '_draw_dashed',
+              '-.': '_draw_dash_dot',
+              ':': '_draw_dotted'}
+
+    multiple = np.ceil(count/len(styles)).astype(np.in32)
+    styles_list = []
+    for _ in range(multiple):
+        for style in styles:
+            styles_list.append(style)
+
+    return styles_list[:count]
 
 
 def calculate_figure_dims(sub_charts: int):
