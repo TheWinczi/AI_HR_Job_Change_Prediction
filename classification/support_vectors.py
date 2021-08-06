@@ -38,6 +38,7 @@ def support_vectors(X_train: np.ndarray, y_train: np.ndarray,
 
     svm = SVC(C=0.5,
               kernel='rbf',
+              probability=True,
               random_state=1)
     svm.fit(X_train, y_train)
 

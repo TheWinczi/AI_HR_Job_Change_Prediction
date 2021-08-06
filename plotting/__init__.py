@@ -13,3 +13,6 @@ from .histograms import plot_data_target_dependencies
 
 # Plotting matrices functions from .matrices subpackage
 from .matrices import plot_confusion_matrix
+
+# Plotting lines functions from .lines subpackage
+from .lines import plot_roc_line
