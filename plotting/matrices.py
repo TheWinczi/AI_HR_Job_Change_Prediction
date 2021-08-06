@@ -21,8 +21,6 @@ def plot_confusion_matrix(clf,
     y_true : ndarray
         Array of true labels belongs to input x data.
     """
-    plt.figure(figsize=(2.5, 2.5))
-
     y_pred = clf.predict(x)
     confmat = confusion_matrix(y_true, y_pred)
 

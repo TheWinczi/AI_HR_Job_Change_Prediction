@@ -92,7 +92,7 @@ def _get_lines_styles(count: int = 1):
               '-.': '_draw_dash_dot',
               ':': '_draw_dotted'}
 
-    multiple = np.ceil(count/len(styles)).astype(np.in32)
+    multiple = np.ceil(count/len(styles)).astype(np.int32)
     styles_list = []
     for _ in range(multiple):
         for style in styles:
