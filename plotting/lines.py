@@ -51,7 +51,7 @@ def plot_roc_line(estimators: list,
     if lines_styles is None:
         lines_styles = _get_lines_styles(len(estimators))
 
-    plt.figure()
+    plt.figure(figsize=(16, 9))
 
     for i, est in enumerate(estimators):
         label = None if labels is None else labels[i]
@@ -114,7 +114,7 @@ def _draw_roc_line(clf,
                             pos_label=1)
 
     auc_ = auc(fpr, tpr)
-    label = f"area = {auc}" if label is None else f"{label} (area = {auc_})"
+    label = f"area = {auc}" if label is None else f"{label} (area = {round(auc_, 4)})"
 
     plt.plot(fpr, tpr,
              linestyle=line_style,
