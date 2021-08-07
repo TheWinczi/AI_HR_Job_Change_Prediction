@@ -37,7 +37,7 @@ def random_forest(X_train: np.ndarray, y_train: np.ndarray,
     # _check_forest_params(X_train, y_train)
 
     forest = RandomForestClassifier(n_estimators=100,
-                                    max_depth=11,
+                                    max_depth=3,
                                     criterion='gini',
                                     random_state=1)
     forest.fit(X_train, y_train)

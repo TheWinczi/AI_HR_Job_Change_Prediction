@@ -3,8 +3,7 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
 
 
 def team(X_train: np.ndarray, y_train: np.ndarray,
@@ -39,21 +38,21 @@ def team(X_train: np.ndarray, y_train: np.ndarray,
     """
     # _check_team_params(X_train, y_train)
 
-    svm = SVC(C=5,
-              kernel='rbf',
-              probability=True,
-              random_state=1)
+    log_ = LogisticRegression(C=0.0001,
+                              solver="liblinear",
+                              tol=10 ** (-3),
+                              random_state=1)
 
     forest_ = RandomForestClassifier(n_estimators=100,
-                                     max_depth=11,
+                                     max_depth=3,
                                      criterion='gini',
                                      random_state=1)
 
-    tree_ = DecisionTreeClassifier(max_depth=5,
-                                   criterion='gini',
+    tree_ = DecisionTreeClassifier(max_depth=2,
+                                   criterion='entropy',
                                    random_state=1)
 
-    voting = VotingClassifier([('s', svm),
+    voting = VotingClassifier([('logistic', log_),
                                ('forest', forest_),
                                ('tree', tree_)],
                               voting='soft')

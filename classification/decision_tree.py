@@ -36,8 +36,8 @@ def decision_tree(X_train: np.ndarray, y_train: np.ndarray,
     """
     # _check_tree_params(X_train, y_train)
 
-    tree = DecisionTreeClassifier(max_depth=5,
-                                  criterion='gini',
+    tree = DecisionTreeClassifier(max_depth=2,
+                                  criterion='entropy',
                                   random_state=1)
     tree.fit(X_train, y_train)
 

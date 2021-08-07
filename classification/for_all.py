@@ -48,15 +48,15 @@ def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
 
     log_reg_ = logistic_regression(X_train, y_train, X_test, y_test)
 
-    svm_ = support_vectors(X_train, y_train, X_test, y_test)
+    # svm_ = support_vectors(X_train, y_train, X_test, y_test)
 
     team_ = team(X_train, y_train, X_test, y_test)
 
     if compare:
-        estimators = [knn_, tree_, svm_, log_reg_, forest_, team_]
+        estimators = [knn_, tree_, log_reg_, forest_, team_]
         plot_roc_line(estimators,
                       X_test, y_test,
-                      labels=["KNN", "TREE", "SVM", "Log Reg", "Forest", "Team Clf"],
+                      labels=["KNN", "Tree", "Log Reg", "Forest", "Team"],
                       title="ROC classifiers comparison",
                       xlabel="false positives",
                       ylabel="true positives")
