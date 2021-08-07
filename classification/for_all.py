@@ -5,6 +5,7 @@ from .random_forest import random_forest
 from .support_vectors import support_vectors
 from .logistic_regression import logistic_regression
 from .team import team
+from plotting import *
 
 
 def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
@@ -39,16 +40,25 @@ def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
     """
     # dnn_ = deep_neural_network(X_train, y_train, X_test, y_test)
 
-    # team_ = team(X_train, y_train, X_test, y_test)
+    tree_ = decision_tree(X_train, y_train, X_test, y_test)
 
     knn_ = k_nearest_neighbors(X_train, y_train, X_test, y_test)
 
-    tree_ = decision_tree(X_train, y_train, X_test, y_test)
-
     forest_ = random_forest(X_train, y_train, X_test, y_test)
-
-    svm_ = support_vectors(X_train, y_train, X_test, y_test)
 
     log_reg_ = logistic_regression(X_train, y_train, X_test, y_test)
 
-    return knn_
+    svm_ = support_vectors(X_train, y_train, X_test, y_test)
+
+    team_ = team(X_train, y_train, X_test, y_test)
+
+    if compare:
+        estimators = [knn_, tree_, svm_, log_reg_, forest_, team_]
+        plot_roc_line(estimators,
+                      X_test, y_test,
+                      labels=["KNN", "TREE", "SVM", "Log Reg", "Forest", "Team Clf"],
+                      title="ROC classifiers comparison",
+                      xlabel="false positives",
+                      ylabel="true positives")
+
+    return None

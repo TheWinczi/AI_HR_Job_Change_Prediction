@@ -36,7 +36,8 @@ def k_nearest_neighbors(X_train: np.ndarray, y_train: np.ndarray,
     """
     # _check_knn_params(X_train, y_train)
 
-    knn = KNeighborsClassifier(n_neighbors=15, metric='manhattan')
+    knn = KNeighborsClassifier(n_neighbors=10,
+                               metric='minkowski')
     knn.fit(X_train, y_train)
 
     if X_test is not None and y_test is not None and len(X_test) == len(y_test):
@@ -60,7 +61,7 @@ def _check_knn_params(X: np.ndarray, y: np.ndarray):
     y : ndarray
         Array of labels belongs to input X data.
     """
-    n_neighbors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    n_neighbors = [1, 2, 3, 5, 6, 7, 8, 9, 10]
     metrics = ['minkowski', 'manhattan']
     param_grid = {
         "n_neighbors": n_neighbors,

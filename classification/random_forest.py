@@ -36,9 +36,9 @@ def random_forest(X_train: np.ndarray, y_train: np.ndarray,
     """
     # _check_forest_params(X_train, y_train)
 
-    forest = RandomForestClassifier(n_estimators=130,
-                                    max_depth=10,
-                                    criterion='entropy',
+    forest = RandomForestClassifier(n_estimators=100,
+                                    max_depth=11,
+                                    criterion='gini',
                                     random_state=1)
     forest.fit(X_train, y_train)
 
@@ -63,8 +63,8 @@ def _check_forest_params(X: np.ndarray, y: np.ndarray):
     y : ndarray
         Array of labels belongs to input X data.
     """
-    max_depths = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    n_estimators = [120, 130, 140, 150, 160, 170, 180]
+    max_depths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    n_estimators = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
     criterions = ['gini', 'entropy']
     param_grid = {
         "n_estimators": n_estimators,
@@ -74,7 +74,6 @@ def _check_forest_params(X: np.ndarray, y: np.ndarray):
     gs = GridSearchCV(estimator=RandomForestClassifier(random_state=1, n_jobs=-1),
                       param_grid=param_grid,
                       scoring='accuracy',
-                      cv=10,
-                      n_jobs=-1)
+                      cv=10)
     gs.fit(X, y)
     print(f"The best combination: {gs.best_params_}, score: {gs.best_score_}")

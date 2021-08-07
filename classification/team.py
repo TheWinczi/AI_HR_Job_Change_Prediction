@@ -1,9 +1,10 @@
 import numpy as np
-from sklearn.ensemble import BaggingClassifier, VotingClassifier
+from sklearn.ensemble import VotingClassifier
 from sklearn.metrics import accuracy_score
-from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
 
 
 def team(X_train: np.ndarray, y_train: np.ndarray,
@@ -38,14 +39,24 @@ def team(X_train: np.ndarray, y_train: np.ndarray,
     """
     # _check_team_params(X_train, y_train)
 
-    knn_ = KNeighborsClassifier(n_neighbors=1, metric='manhattan')
-    svm_ = SVC(C=60, kernel='rbf', random_state=1)
-    tree_ = DecisionTreeClassifier(random_state=1)
+    svm = SVC(C=5,
+              kernel='rbf',
+              probability=True,
+              random_state=1)
 
-    voting = VotingClassifier([('knn', knn_),
-                               ('svm', svm_),
+    forest_ = RandomForestClassifier(n_estimators=100,
+                                     max_depth=11,
+                                     criterion='gini',
+                                     random_state=1)
+
+    tree_ = DecisionTreeClassifier(max_depth=5,
+                                   criterion='gini',
+                                   random_state=1)
+
+    voting = VotingClassifier([('s', svm),
+                               ('forest', forest_),
                                ('tree', tree_)],
-                              n_jobs=-1)
+                              voting='soft')
     voting.fit(X_train, y_train)
 
     if X_test is not None and y_test is not None and len(X_test) == len(y_test):
@@ -69,21 +80,4 @@ def _check_team_params(X: np.ndarray, y: np.ndarray):
     y : ndarray
         Array of labels belongs to input X data.
     """
-    tree = DecisionTreeClassifier(criterion='entropy', random_state=1)
-
-    for i in range(100, 301, 50):
-        bagging = BaggingClassifier(base_estimator=tree,
-                                    n_estimators=i,
-                                    max_samples=1.0,
-                                    max_features=1.0,
-                                    random_state=1)
-        bagging.fit(X, y)
-        print(bagging.score(X, y))
-
-    knn_ = KNeighborsClassifier(n_neighbors=1, metric='manhattan')
-    svm_ = SVC(C=60, kernel='rbf', random_state=1)
-    tree_ = DecisionTreeClassifier(random_state=1)
-
-    voting = VotingClassifier([('knn', knn_), ('svm', svm_), ('tree', tree_)],
-                              n_jobs=-1)
-    voting.fit(X, y)
+    pass

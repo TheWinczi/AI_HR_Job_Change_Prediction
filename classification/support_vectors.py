@@ -36,7 +36,7 @@ def support_vectors(X_train: np.ndarray, y_train: np.ndarray,
     """
     # _check_svm_params(X_train, y_train)
 
-    svm = SVC(C=0.5,
+    svm = SVC(C=5,
               kernel='rbf',
               probability=True,
               random_state=1)
@@ -63,7 +63,7 @@ def _check_svm_params(X: np.ndarray, y: np.ndarray):
     y : ndarray
         Array of labels belongs to input X data.
     """
-    Cs = [0.001, 0.01, 0.1, 1, 10, 20, 30]
+    Cs = [0.001, 0.01, 0.1, 1, 5, 10]
     kernels = ["linear", "poly", "rbf", "sigmoid"]
     param_grid = {
         "C": Cs,

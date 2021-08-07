@@ -36,8 +36,8 @@ def logistic_regression(X_train: np.ndarray, y_train: np.ndarray,
     """
     # _check_logistic_regression_params(X_train, y_train)
 
-    logistic = LogisticRegression(C=0.5,
-                                  solver='lbfgs',
+    logistic = LogisticRegression(C=0.01,
+                                  solver='newton-cg',
                                   tol=10**(-3),
                                   random_state=1)
     logistic.fit(X_train, y_train)
@@ -63,7 +63,7 @@ def _check_logistic_regression_params(X: np.ndarray, y: np.ndarray):
     y : ndarray
         Array of labels belongs to input X data.
     """
-    Cs = [0.001, 0.01, 0.1, 1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    Cs = [0.001, 0.01, 0.1, 1, 10, 20, 40, 50]
     solvers = ["newton-cg", "lbfgs", "liblinear", "sag", "saga"]
     param_grid = {
         "C": Cs,
