@@ -1,6 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.pipeline import make_pipeline
+from sklearn.decomposition import PCA, KernelPCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from .utilities import drop_columns
 
 
@@ -38,20 +41,16 @@ def process_all_labels(df: pd.DataFrame):
     proc_data
         Processed DataFrame with data ready to machine learning.
     """
-    dummies_cols = ["gender", "relevent_experience", "enrolled_university", "education_level",
+    dummies_cols = ["gender", "relevent_experience", "enrolled_university",
                     "major_discipline", "company_size"]
     df = process_dummies_columns(df, dummies_cols)
 
     encoded_cols = ["city", "city_development_index", "experience", "company_type",
-                    "last_new_job", "training_hours"]
+                    "education_level", "last_new_job", "training_hours"]
     df = encode_labels(df, encoded_cols)
 
     insignificant_cols = ["enrollee_id"]
     df = drop_columns(df, insignificant_cols)
-
-    # df["relevent_experience"] = process_relevent_exp(df)
-    # df["enrolled_university"] = process_enrolled_university(df)
-    # df["education_level"] = process_education_level(df)
 
     return df
 
@@ -172,7 +171,7 @@ def process_education_level(df: pd.DataFrame):
     return df["education_level"]
 
 
-def prepare_train_test_data(df: pd.DataFrame):
+def prepare_train_test_data(df: pd.DataFrame, reductioner: str = None):
     """
     Prepare tran and test sets ready to machine learning.
 
@@ -180,6 +179,10 @@ def prepare_train_test_data(df: pd.DataFrame):
     ----------
     df : DataFrame
         DataFrame with train/test data.
+
+    reductioner : str {default: None}
+        Dimensionality reduction algorithm.
+        Can be one of listed: ["LDA", "PCA"]. Could be None.
 
     Returns
     -------
@@ -190,11 +193,21 @@ def prepare_train_test_data(df: pd.DataFrame):
 
     X = df[no_target_cols].values
     y = df["target"].values
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=1, stratify=y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1, stratify=y)
 
-    sc = StandardScaler()
-    sc.fit(X_train)
-    X_train_std = sc.transform(X_train)
-    X_test_std = sc.transform(X_test)
+    pipe = make_pipeline(StandardScaler())
+    pipe.fit(X_train)
+    X_train = pipe.transform(X_train)
+    X_test = pipe.transform(X_test)
 
-    return X_train_std, y_train, X_test_std, y_test
+    if reductioner == "pca":
+        pca = PCA(n_components=5)
+        X_train = pca.fit_transform(X_train)
+        X_test = pca.transform(X_test)
+    elif reductioner == "lda":
+        lda = LDA(n_components=1)
+        lda.fit(X_train, y_train)
+        X_train = lda.transform(X_train)
+        X_test = lda.transform(X_test)
+
+    return X_train, y_train, X_test, y_test
