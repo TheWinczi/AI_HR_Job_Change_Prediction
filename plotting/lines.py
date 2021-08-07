@@ -120,7 +120,8 @@ def _draw_roc_line(clf,
              linestyle=line_style,
              color=color,
              label=label,
-             lw=1)
+             lw=3,
+             alpha=0.5)
 
 
 def _draw_random_guessing_roc_line(color: str = "black",
