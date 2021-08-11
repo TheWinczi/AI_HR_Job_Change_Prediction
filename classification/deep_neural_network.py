@@ -1,9 +1,9 @@
 import numpy as np
 import tensorflow as tf
 from sklearn.metrics import accuracy_score
+from plotting import plot_learning_history
 
 
-# TODO
 def deep_neural_network(X_train: np.ndarray, y_train: np.ndarray,
                         X_test: np.ndarray = None, y_test: np.ndarray = None):
     """
@@ -34,8 +34,45 @@ def deep_neural_network(X_train: np.ndarray, y_train: np.ndarray,
     dnn
         Trained classifier ready to predict.
     """
-    _check_deep_network_params(X_train, y_train)
-    pass
+    # _check_deep_network_params(X_train, y_train)
+
+    tf.random.set_seed(1)
+    num_epochs = 50
+    batch_size = 100
+    steps_per_epoch = int(np.ceil(len(y_train) / batch_size))
+
+    model = tf.keras.Sequential()
+    model.add(tf.keras.layers.Dense(units=32,
+                                    activation='tanh'))
+    model.add(tf.keras.layers.Dense(units=256,
+                                    activation='softsign'))
+    model.add(tf.keras.layers.Dense(units=512,
+                                    activation='tanh'))
+    model.add(tf.keras.layers.Dense(units=256,
+                                    activation='softsign'))
+    model.add(tf.keras.layers.Dense(units=64,
+                                    activation='softplus'))
+    model.add(tf.keras.layers.Dense(units=1,
+                                    activation='sigmoid'))
+    model.build(input_shape=(None, len(X_train[0])))
+
+    model.compile(optimizer='adam',
+                  loss=tf.keras.losses.binary_crossentropy,
+                  metrics=['accuracy'])
+
+    hist = model.fit(X_train, y_train,
+                     batch_size=batch_size,
+                     epochs=num_epochs,
+                     steps_per_epoch=steps_per_epoch)
+    plot_learning_history(hist.history)
+
+    if X_test is not None and y_test is not None and len(X_test) == len(y_test):
+        y_pred = model.predict(X_test)
+        y_pred = list(map(lambda item: 0 if item[0] <= 0.5 else 1, y_pred))
+        print(sum(y_pred), len(y_pred))
+        print(f"Deep Neural Network test accuracy: {accuracy_score(y_test, y_pred)}")
+
+    return model
 
 
 # TODO
@@ -54,3 +91,9 @@ def _check_deep_network_params(X: np.ndarray, y: np.ndarray):
         Array of labels belongs to input X data.
     """
     pass
+
+
+def train_input_fn(X_train, y_train, batch_size=10):
+    dataset = tf.data.Dataset.from_tensor_slices(
+        (dict(X_train), y_train))
+    return dataset.shuffle(10000).repeat().batch(batch_size)

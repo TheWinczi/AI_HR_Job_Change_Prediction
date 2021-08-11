@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+from .deep_neural_network import deep_neural_network
 from .k_nearest_neighbors import k_nearest_neighbors
 from .decision_tree import decision_tree
 from .random_forest import random_forest
@@ -10,6 +12,7 @@ from plotting import *
 
 def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
                         X_test: np.ndarray = None, y_test: np.ndarray = None,
+                        df: pd.DataFrame = None,
                         compare: bool = True):
     """
     Try all classifiers which was implemented to classify input data.
@@ -30,6 +33,10 @@ def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
     y_test : ndarray {default: None}
         Array of labels belongs to X_test data. Could be None.
 
+    df : DataFrame
+        DataFrame storing all data to train and test. Could be None.
+        Only used in Deep Neural Network, otherwise ignored.
+
     compare : bool {default: True}
         Are classifiers needed to be compared on some plots
 
@@ -38,7 +45,7 @@ def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
     clf
         The best trained classifier ready to predict.
     """
-    # dnn_ = deep_neural_network(X_train, y_train, X_test, y_test)
+    dnn_ = deep_neural_network(X_train, y_train, X_test, y_test)
 
     tree_ = decision_tree(X_train, y_train, X_test, y_test)
 
@@ -53,10 +60,10 @@ def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
     team_ = team(X_train, y_train, X_test, y_test)
 
     if compare:
-        estimators = [knn_, tree_, log_reg_, forest_, team_]
+        estimators = [dnn_, knn_, tree_, log_reg_, forest_, team_]
         plot_roc_line(estimators,
                       X_test, y_test,
-                      labels=["KNN", "Tree", "Log Reg", "Forest", "Team"],
+                      labels=["DNN", "KNN", "Tree", "Log Reg", "Forest", "Team"],
                       title="ROC classifiers comparison",
                       xlabel="false positives",
                       ylabel="true positives")
