@@ -16,3 +16,4 @@ from .matrices import plot_confusion_matrix
 
 # Plotting lines functions from .lines subpackage
 from .lines import plot_roc_line
+from .lines import plot_learning_history

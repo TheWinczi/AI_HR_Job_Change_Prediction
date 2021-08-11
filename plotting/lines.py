@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
 from sklearn.metrics import roc_curve, auc
 from plotting import _get_lines_styles
 
@@ -79,6 +80,36 @@ def plot_roc_line(estimators: list,
     plt.show()
 
 
+def plot_learning_history(history: dict[str, list]):
+    """
+    Plot learning history in one plot.
+    Parameters
+    ----------
+    history : dict
+        Dictionary object stores history of learning e.g.
+        history = {'accuracy' : [....],
+                   'loss': [...]}
+    """
+    num_epochs = len(history['accuracy'])
+
+    plt.figure(figsize=(16, 9))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(range(1, num_epochs+1), history['loss'])
+    plt.title('Loss Function')
+    plt.xlabel('epoch')
+    plt.ylabel('value')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(range(1, num_epochs+1), history['accuracy'])
+    plt.title('Learning Accuracy')
+    plt.xlabel('epoch')
+    plt.ylabel('value')
+
+    plt.tight_layout()
+    plt.show()
+
+
 def _draw_roc_line(clf,
                    x: np.ndarray,
                    y_true: np.ndarray,
@@ -106,8 +137,12 @@ def _draw_roc_line(clf,
     line_style : str {default: '-'}
         Style of drawing line.
     """
-    scores = clf.predict_proba(x)
-    scores = list(map(lambda item: item[1], scores))
+    if isinstance(clf, tf.keras.Sequential):
+        scores = clf.predict(x)
+        scores = list(map(lambda item: item[0], scores))
+    else:
+        scores = clf.predict_proba(x)
+        scores = list(map(lambda item: item[1], scores))
 
     fpr, tpr, _ = roc_curve(y_true,
                             scores,
