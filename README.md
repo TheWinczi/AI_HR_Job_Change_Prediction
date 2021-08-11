@@ -90,10 +90,10 @@ Classification algorithms used:
 
 ---
 
-### Summary and general Thoughts
+### Summary and general thoughts
 
 After programming, I think it was my first time when I deal with such demanding data. 
-However, I learned such new things
+However, I learned such new things:
 + creating and analysis ROC lines and AOC values, 
 + creating and analysis confusion matrices, 
 + creating and using Pipelines in sklearn package,
@@ -101,6 +101,7 @@ However, I learned such new things
 + creating plots with multi data,
 + creating basic python documentation.
 
+General thoughts:
 1. In future programs, I'd like to focus even more on analyzing dependencies in the input data. 
 2. I am most dissatisfied with the accuracy of prediction.
 3. Generally I'm happy with the code and its documentation. 
