@@ -8,8 +8,8 @@ def main():
 
     native_data = load_native_data(native_data_file_path)
     processed_data = process_native_data(native_data)
-    X_train, y_train, X_test, y_test = prepare_train_test_data(processed_data)
-
+    X_train, y_train, X_test, y_test = prepare_train_test_data(processed_data,
+                                                               reductioner="lda")
     # analyse_native_data(native_data)
 
     try_all_classifiers(X_train, y_train, X_test, y_test)

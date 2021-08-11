@@ -37,7 +37,7 @@ def deep_neural_network(X_train: np.ndarray, y_train: np.ndarray,
     # _check_deep_network_params(X_train, y_train)
 
     tf.random.set_seed(1)
-    num_epochs = 50
+    num_epochs = 95
     batch_size = 100
     steps_per_epoch = int(np.ceil(len(y_train) / batch_size))
 

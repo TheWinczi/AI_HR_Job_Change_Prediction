@@ -55,17 +55,25 @@ def try_all_classifiers(X_train: np.ndarray, y_train: np.ndarray,
 
     log_reg_ = logistic_regression(X_train, y_train, X_test, y_test)
 
-    # svm_ = support_vectors(X_train, y_train, X_test, y_test)
+    svm_ = support_vectors(X_train, y_train, X_test, y_test)
 
     team_ = team(X_train, y_train, X_test, y_test)
 
     if compare:
-        estimators = [dnn_, knn_, tree_, log_reg_, forest_, team_]
+        estimators = [dnn_, knn_, tree_, log_reg_, forest_, team_, svm_]
         plot_roc_line(estimators,
                       X_test, y_test,
-                      labels=["DNN", "KNN", "Tree", "Log Reg", "Forest", "Team"],
-                      title="ROC classifiers comparison",
+                      labels=["DNN", "KNN", "Tree", "Log Reg", "Forest", "Team", "SVM"],
+                      title="ROC classifiers comparison (no reduction)",
                       xlabel="false positives",
                       ylabel="true positives")
+
+        best_est = [dnn_, log_reg_, svm_]
+        best_est_titles = ["DNN", "Logistic Regression", "SVM"]
+        for i, est in enumerate(best_est):
+            plot_confusion_matrix(est,
+                                  X_test,
+                                  y_test,
+                                  best_est_titles[i])
 
     return None
