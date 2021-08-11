@@ -37,15 +37,19 @@ To reduce data dimensionality from 14 to *n* (when n << 14) 3 algorithms was use
 
 > **KernelPCA** algorithm in scikit-learn doesn't contain attributes thanks to which would be possible to plot features importances.
 
-> **LDA** dimensionality reduction could reduce input data into *min(unique_targets-1, features-1)*-dimensional space. In this case, this algorithm will not be of use.
+> **LDA** dimensionality reduction could reduce input data into *min(unique_targets-1, features-1)*-dimensional space. 
+> So on bars chart only 1 bar containing all the data information would be visible.
 
 ---
 
 ### Classification
 Classification was performed using several different algorithms. 
-All the algorithms used were compared in several ways.
+All the algorithms used were compared in several ways
++ using ROC lines and AOC values,
++ test data prediction accuracy score,
++ test data prediction accuracy with and without dimensionality reduction.
 
-Algorithms used:
+Classification algorithms used:
 1. Decision Tree,
 2. Random forest,
 3. K-Nearest Neighbors (KNN),
@@ -54,17 +58,53 @@ Algorithms used:
 6. Team Classification,
 7. Deep Neural Network.
 
+> During programming, PCA and LDA dimensionality reduction algorithms has been compared and 
+> despite different features counts of PCA, LDA has given better results. 
+> As the result LDA dimensionality reduction algorithm has been selected.
+> 
+> Algorithm Name      | Test Accuracy \[%] |
+> --------------------|--------------------|
+> Decision Tree       |        76.36      |
+> Random forest       |        76.90      |
+> K-Nearest Neighbors |        75.85      |
+> C-Support Vector    |        76.34      |
+> Logistic Regression |        76.37      |
+> Team Classification |        76.37      |
+> Deep Neural Network |        76.76      |
+> 
+> Every Classification algorithms reached common accuracy score (about 75/76%). 
+> However, the best classifier (using only accuracy score) is Random Forest.
+> 
+> ![ROC_Lines_LDA](img/lda_roc_comparison.png)
+> **BUT**, looking at ROC lines it is visible that the best classifiers are Team Classification and (with a difference of 1 in ten thousand)
+> Logistic Regression and Deep Neural Network.
+
 ---
 
-## TODO ...
-1. Using and comparing different classification algorithms,
-2. Using team classification,   
-3. Showing differences between ready estimators from sklearn package and
-   tensorflow.keras deep neural network,
-4. Summary
-   * what has gone well/wrong,
-   * what to change in the future programs, 
-   * general thoughts
+### Confusion Matrices
+> At the end the best classification algorithms confusion matrices have been created.
+> 
+> Deep Neural Network | SVM | Logistic Regression |
+> --------------------|-----|---------------------|
+> ![dnn_confusion_matrix](img/dnn_confusion_matrix.png) | ![svm_confusion_matrix](img/svm_confusion_matrix.png) | ![log_reg_confusion_matrix](img/log_reg_confusion_matrix.png) |
+
+---
+
+### Summary and general Thoughts
+
+After programming, I think it was my first time when I deal with such demanding data. 
+However, I learned such new things
++ creating and analysis ROC lines and AOC values, 
++ creating and analysis confusion matrices, 
++ creating and using Pipelines in sklearn package,
++ casting string labels into given values using python map,
++ creating plots with multi data,
++ creating basic python documentation.
+
+1. In future programs, I'd like to focus even more on analyzing dependencies in the input data. 
+2. I am most dissatisfied with the accuracy of prediction.
+3. Generally I'm happy with the code and its documentation. 
+4. I'd like to dive a lot deeper into the tensorflow library.
 
 ---
 
