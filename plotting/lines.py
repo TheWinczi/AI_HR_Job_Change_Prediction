@@ -92,19 +92,27 @@ def plot_learning_history(history: dict[str, list]):
     """
     num_epochs = len(history['accuracy'])
 
-    plt.figure(figsize=(16, 9))
+    fig, (ax1, ax2) = plt.subplots(1, 2)
 
-    plt.subplot(1, 2, 1)
-    plt.plot(range(1, num_epochs+1), history['loss'])
-    plt.title('Loss Function')
-    plt.xlabel('epoch')
-    plt.ylabel('value')
+    ax1.plot(range(1, num_epochs+1), history['loss'], label="train loss")
 
-    plt.subplot(1, 2, 2)
-    plt.plot(range(1, num_epochs+1), history['accuracy'])
-    plt.title('Learning Accuracy')
-    plt.xlabel('epoch')
-    plt.ylabel('value')
+    if 'val_loss' in history.keys():
+        ax1.plot(range(1, num_epochs + 1), history['val_loss'], 'k--', label="validation loss")
+
+    ax1.set_title('Loss Function')
+    ax1.set_xlabel('epoch')
+    ax1.set_ylabel('value')
+    ax1.legend()
+
+    ax2.plot(range(1, num_epochs+1), history['accuracy'], label="train accuracy")
+
+    if 'val_accuracy' in history.keys():
+        ax2.plot(range(1, num_epochs + 1), history['val_accuracy'], 'k--', label="validation accuracy")
+
+    ax2.set_title('Learning Accuracy')
+    ax2.set_xlabel('epoch')
+    ax2.set_ylabel('value')
+    ax2.legend()
 
     plt.tight_layout()
     plt.show()

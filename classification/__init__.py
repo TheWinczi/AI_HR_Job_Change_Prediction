@@ -9,3 +9,4 @@ from .logistic_regression import logistic_regression
 from .random_forest import random_forest
 from .support_vectors import support_vectors
 from .team import team
+from .deep_neural_network import deep_neural_network
