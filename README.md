@@ -1,4 +1,4 @@
-# HR Job Change Prediction
+# Job Change Prediction
 ```AI Supervised learning from data```
 ```Created in July 2021```
 
